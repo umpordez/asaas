@@ -6,8 +6,14 @@ class AsaasPayment extends AsaasBaseClient {
         V.string(customerId, 'customerId');
         V.string(paymentType, 'paymentType');
         V.object(paymentData, 'paymentData');
-
         V.number(paymentData.value, 'paymentData.value');
+
+        if (paymentData.installmentCount > 1) {
+            paymentData.totalValue = paymentData.value;
+        } else {
+            delete paymentData.installmentCount;
+        }
+
         V.string(paymentData.dueDate, 'paymentData.dueDate');
 
         paymentData.customer = customerId;
@@ -53,12 +59,29 @@ class AsaasPayment extends AsaasBaseClient {
     async pay(customerId, creditCardData, paymentData) {
         V.number(paymentData.installmentCount, 'installmentCount');
 
+        const { token, details, holder } = creditCardData;
+        if (token) {
+            V.string(token, 'token');
+            paymentData.creditCardToken = token;
+        } else {
+            V.object(details, 'details');
+            V.object(holder, 'holder');
+
+            paymentData.creditCard = {
+                holderName: holder.name,
+                ...details
+            };
+
+            paymentData.creditCardHolderInfo = { ...holder };
+        }
+
         const paymentResponse = await this.create(
             customerId,
             'CREDIT_CARD',
             paymentData
         );
 
+        return paymentResponse;
     }
 }
 

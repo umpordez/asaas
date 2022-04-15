@@ -100,10 +100,19 @@ describe('Payment Asaas', () => {
 
         const creditCardData = {
             holder: {
+                name: 'Deividy M Zachetti',
+                email: 'deividyz@gmail.com',
+                cpfCnpj: '38934783885',
+                postalCode: '13466321',
+                addressNumber: '501',
+                mobilePhone: '19992804294',
             },
 
             details: {
-
+                number: '5162306219378829',
+                expiryMonth: formatDate(addDays(new Date(), 30), 'MM'),
+                expiryYear: formatDate(new Date(), 'yyyy'),
+                ccv: '318'
             }
         };
 
@@ -111,14 +120,107 @@ describe('Payment Asaas', () => {
             customer.id,
             creditCardData,
             {
+                installmentCount: 1,
                 dueDate: formatDate(addDays(new Date(), 1), 'yyyy-MM-dd'),
                 value: 100
             }
         );
 
         assert(paymentResponse);
-        assert(paymentResponse.id);
-        assert(paymentResponse.dueDate);
-        assert(paymentResponse.fine);
+        assert(paymentResponse.creditCard);
+        assert(paymentResponse.creditCard.creditCardToken);
+    });
+
+    it('pay() with installment', async () => {
+        const customerClient = new CustomerClient(TEST_ASAAS_TOKEN, 'sandbox');
+        const paymentClient = new PaymentClient(TEST_ASAAS_TOKEN, 'sandbox');
+
+        const customer = await customerClient.create({
+            name: 'Deividy Metheler Zachetti',
+            cpfCnpj: 38934783885
+        });
+
+        const creditCardData = {
+            holder: {
+                name: 'Deividy M Zachetti',
+                email: 'deividyz@gmail.com',
+                cpfCnpj: '38934783885',
+                postalCode: '13466321',
+                addressNumber: '501',
+                mobilePhone: '19992804294',
+            },
+
+            details: {
+                number: '5162306219378829',
+                expiryMonth: formatDate(addDays(new Date(), 30), 'MM'),
+                expiryYear: formatDate(new Date(), 'yyyy'),
+                ccv: '318'
+            }
+        };
+
+        const paymentResponse = await paymentClient.pay(
+            customer.id,
+            creditCardData,
+            {
+                installmentCount: 6,
+                dueDate: formatDate(addDays(new Date(), 1), 'yyyy-MM-dd'),
+                value: 100
+            }
+        );
+
+        assert(paymentResponse);
+        assert(paymentResponse.creditCard);
+        assert(paymentResponse.creditCard.creditCardToken);
+    });
+
+    it('pay() with token', async () => {
+        const customerClient = new CustomerClient(TEST_ASAAS_TOKEN, 'sandbox');
+        const paymentClient = new PaymentClient(TEST_ASAAS_TOKEN, 'sandbox');
+
+        const customer = await customerClient.create({
+            name: 'Deividy Metheler Zachetti',
+            cpfCnpj: 38934783885
+        });
+
+        const creditCardData = {
+            holder: {
+                name: 'Deividy M Zachetti',
+                email: 'deividyz@gmail.com',
+                cpfCnpj: '38934783885',
+                postalCode: '13466321',
+                addressNumber: '501',
+                mobilePhone: '19992804294',
+            },
+
+            details: {
+                number: '5162306219378829',
+                expiryMonth: formatDate(addDays(new Date(), 30), 'MM'),
+                expiryYear: formatDate(new Date(), 'yyyy'),
+                ccv: '318'
+            }
+        };
+
+        const paymentResponse = await paymentClient.pay(
+            customer.id,
+            creditCardData,
+            {
+                installmentCount: 1,
+                dueDate: formatDate(addDays(new Date(), 1), 'yyyy-MM-dd'),
+                value: 100
+            }
+        );
+
+        const token = paymentResponse.creditCard.creditCardToken;
+        const paymentResponse2 = await paymentClient.pay(
+            customer.id,
+            { token },
+            {
+                installmentCount: 1,
+                dueDate: formatDate(addDays(new Date(), 1), 'yyyy-MM-dd'),
+                value: 1000
+            }
+        );
+
+        assert(paymentResponse2.status === 'CONFIRMED');
     });
 });

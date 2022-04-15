@@ -37,7 +37,20 @@ class AsaasBaseClient {
             data: body ? JSON.stringify(body) : undefined
         };
 
-        this.lastRequest = options;
+        this.lastRequest = { ...options };
+
+        if (body) {
+            if (body.creditCard) {
+                body.creditCard = '[hidden]';
+            }
+
+            if (body.creditCardHolderInfo) {
+                body.creditCardHolderInfo = '[hidden]';
+            }
+
+            this.lastRequest.body = body;
+        }
+
         this.lastRequests.push(this.lastRequest);
 
         let response;
@@ -52,6 +65,7 @@ class AsaasBaseClient {
 
             response = res.data;
         } catch (ex) {
+            ex.response = ex.response || ex.res;
             if (ex.response) {
                 const { response } = ex;
                 this.lastResponse = {
