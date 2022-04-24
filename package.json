@@ -1,8 +1,8 @@
 {
-    "name": "asaas-tests",
+    "name": "asaas",
     "version": "0.0.1",
     "description": "",
-    "main": "app.js",
+    "main": "index.js",
     "scripts": {},
     "author": "",
     "license": "unlicense",

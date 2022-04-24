@@ -29,7 +29,6 @@ class AsaasBaseClient {
         };
 
         url = `${this.config.baseUrl}/${url}`;
-
         const options = {
             method: method.toUpperCase(),
             headers,
