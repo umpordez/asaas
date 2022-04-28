@@ -8,10 +8,12 @@ class AsaasPayment extends AsaasBaseClient {
         V.object(paymentData, 'paymentData');
         V.number(paymentData.value, 'paymentData.value');
 
-        if (paymentData.installmentCount > 1) {
-            paymentData.totalValue = paymentData.value;
-        } else {
-            delete paymentData.installmentCount;
+        if (!paymentData.installmentValue) {
+            if (paymentData.installmentCount > 1) {
+                paymentData.totalValue = paymentData.value;
+            } else {
+                delete paymentData.installmentCount;
+            }
         }
 
         V.string(paymentData.dueDate, 'paymentData.dueDate');
