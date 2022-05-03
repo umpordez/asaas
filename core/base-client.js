@@ -36,7 +36,7 @@ class AsaasBaseClient {
             data: body ? JSON.stringify(body) : undefined
         };
 
-        this.lastRequest = { ...options };
+        this.lastRequest = { ...options, data: body };
 
         if (body) {
             if (body.creditCard) {
