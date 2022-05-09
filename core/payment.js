@@ -28,6 +28,15 @@ class AsaasPayment extends AsaasBaseClient {
         );
     }
 
+    async getInstallments(installmentId) {
+        const installmentResponse = await this.doRequest(
+            'GET',
+            `payments?installment=${installmentId}`
+        );
+
+        return installmentResponse;
+    }
+
     async createBillet(customerId, paymentData) {
         const paymentResponse = await this.create(
             customerId,

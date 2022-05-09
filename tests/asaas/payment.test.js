@@ -266,7 +266,7 @@ describe('Payment Asaas', () => {
         assert(paymentResponse2.status === 'CONFIRMED');
     });
 
-    it.skip('transfer production', async () => {
+    it.only('transfer production', async () => {
         const customerClient = new CustomerClient(process.env.ASAAS_TOKEN, 'prod');
         const response = await customerClient.doRequest(
             'POST',
@@ -274,14 +274,14 @@ describe('Payment Asaas', () => {
             {
                 value: 2,
                 bankAccount: {
-                    bank: { code: 260 },
-                    accountName: 'NuBank Deividy',
+                    bank: { code: '033' },
+                    accountName: 'Santander Deividy',
                     ownerName: 'Deividy Metheler Zachetti',
                     ownerBirthDate: '1990-05-08',
                     cpfCnpj: '38934783885',
-                    agency: '0001',
-                    account: '7422014',
-                    accountDigit: '5',
+                    agency: '0090',
+                    account: '01061760',
+                    accountDigit: '2',
                     bankAccountType: 'CONTA_CORRENTE'
                 }
             }
