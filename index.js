@@ -1,6 +1,6 @@
 const AsaasCustomer = require('./core/customer');
 const AsaasPayment = require('./core/payment');
-const AsaaAccount = require('./core/account');
+const AsaasAccount = require('./core/account');
 
 class Asaas {
     constructor(token, env = 'sandbox') {
