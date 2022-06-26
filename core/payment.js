@@ -34,12 +34,17 @@ class AsaasPayment extends AsaasBaseClient {
 
     async refundInstallments(installmentIds) {
         const responses = [ ];
+        const requests = [];
 
         for (const id of installmentIds) {
-            responses.push(await this.doRequest(
-                'POST', `installments/${id}/refund`
-            ));
+            await this.doRequest('POST', `installments/${id}/refund`);
+
+            requests.push(this.lastRequest);
+            responses.push(this.lastResponse);
         }
+
+        this.lastRequest = requests;
+        this.lastResponse = responses;
 
         return responses;
     }
