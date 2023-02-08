@@ -9,6 +9,10 @@ class AsaasAccount extends AsaasBaseClient {
         const  url = `finance/payment/statistics?${querystring.encode(params)}`;
         return this.doRequest('GET', url);
     }
+
+    async create(accountData) {
+        return this.doRequest('POST', 'accounts', accountData);
+    }
 }
 
 module.exports = AsaasAccount;
