@@ -28,6 +28,18 @@ class AsaasPayment extends AsaasBaseClient {
         );
     }
 
+    async qrCode(addressKey, value, description) {
+        V.string(addressKey, 'addressKey');
+        V.number(value, 'value');
+
+        V.string(description, 'description');
+        return this.doRequest(
+            'POST',
+            'pix/qrCodes/static',
+            { addressKey, value, description }
+        );
+    }
+
     async refund(paymentId) {
         return this.doRequest('POST', `payments/${paymentId}/refund`);
     }
