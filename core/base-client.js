@@ -3,7 +3,7 @@ const V = require('argument-validator');
 
 const configByEnv = {
     sandbox: { baseUrl: 'https://sandbox.asaas.com/api/v3' },
-    prod: { baseUrl: 'https://www.asaas.com/api/v3' }
+    prod: { baseUrl: 'https://api.asaas.com/v3' }
 };
 
 class AsaasBaseClient {
